@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ads1x1x = { git = "https://github.com/eldruin/ads1x1x-rs.git", hash = "2563090" }
+ads1x1x = { git = "https://github.com/eldruin/ads1x1x-rs.git", hash = "d3af2b6" }
 embedded-hal = "1.0.0"

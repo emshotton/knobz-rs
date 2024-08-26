@@ -98,10 +98,10 @@ where
 {
     pub fn new(i2c_device: I2C, address: Address) -> Result<Self, crate::errors::Error> {
         let ads1115_address = match address {
-            Address::X48 => ads1x1x::SlaveAddr::default(),
-            Address::X49 => ads1x1x::SlaveAddr::Vdd,
-            Address::X4A => ads1x1x::SlaveAddr::Sda,
-            Address::X4B => ads1x1x::SlaveAddr::Scl,
+            Address::X48 => ads1x1x::TargetAddr::default(),
+            Address::X49 => ads1x1x::TargetAddr::Vdd,
+            Address::X4A => ads1x1x::TargetAddr::Sda,
+            Address::X4B => ads1x1x::TargetAddr::Scl,
         };
 
         let timer_offset_us = match address {
