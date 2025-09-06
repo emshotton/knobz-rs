@@ -2,6 +2,7 @@
 mod errors;
 
 const MAX_CHANNEL_VALUE: u16 = 26427;
+const DEFAULT_UPDATE_INTERVAL_US: u32 = 1000;
 
 #[derive(Debug)]
 pub enum Channel {
@@ -53,6 +54,7 @@ impl Address {
         Address::X48
     }
 
+    #[allow(dead_code)]
     fn from_u8(value: u8) -> Address {
         match value {
             0x48 => Address::X48,
@@ -90,13 +92,22 @@ pub struct Knobz<I2C> {
     >,
     channel_index: Channel,
     timer_us: u32,
+    update_interval_us: u32,
 }
 
 impl<I2C, E> Knobz<I2C>
 where
     I2C: embedded_hal::i2c::I2c<Error = E>,
 {
-    pub fn new(i2c_device: I2C, address: Address) -> Result<Self, crate::errors::Error> {
+    pub fn default(i2c_device: I2C) -> Result<Self, crate::errors::Error> {
+        Self::new(i2c_device, Address::default(), DEFAULT_UPDATE_INTERVAL_US)
+    }
+
+    pub fn new(
+        i2c_device: I2C,
+        address: Address,
+        update_interval_us: u32,
+    ) -> Result<Self, crate::errors::Error> {
         let ads1115_address = match address {
             Address::X48 => ads1x1x::TargetAddr::default(),
             Address::X49 => ads1x1x::TargetAddr::Vdd,
@@ -130,6 +141,7 @@ where
             ads1115: adc,
             channel_index: Channel::A0,
             timer_us: timer_offset_us,
+            update_interval_us,
         })
     }
 
@@ -157,7 +169,7 @@ where
 
     pub fn update(&mut self, dt_us: u32) -> Option<Change> {
         self.timer_us += dt_us;
-        if self.timer_us < 1000 {
+        if self.timer_us < self.update_interval_us {
             return None;
         }
         self.timer_us = 0;
