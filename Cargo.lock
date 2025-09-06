@@ -4,8 +4,8 @@ version = 3
 
 [[package]]
 name = "ads1x1x"
-version = "0.2.2"
-source = "git+https://github.com/eldruin/ads1x1x-rs.git#256309063a39836e5c30b3e9eb2c3bcd3246bdec"
+version = "0.3.0"
+source = "git+https://github.com/eldruin/ads1x1x-rs.git#d5e8a853f5fd9ba0899588309b4961714341ac22"
 dependencies = [
  "embedded-hal",
  "nb",
